@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#170b2d">
+<title>For Prachi 💖 | A Magical Birthday</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+  --pink:#ff7ca8;
+  --gold:#ffe49a;
+  --purple:#a78bfa;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:Poppins,sans-serif;
+  color:white;
+  min-height:100vh;
+  overflow:hidden;
+  background:radial-gradient(ellipse at top,#53245f,#241039 48%,#10081f);
+}
+button { font:inherit; cursor:pointer; }
+button:focus-visible { outline:3px solid white; outline-offset:4px; }
+#sky { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+.star {
+  position:absolute; color:white; left:var(--x); top:var(--y);
+  font-size:var(--s); animation:twinkle var(--d) infinite;
+}
+@keyframes twinkle {
+  0%,100% { opacity:.9; transform:scale(1); }
+  50% { opacity:.2; transform:scale(.5); }
+}
+@keyframes float {
+  0%,100% { transform:translateY(0) rotate(-2deg); }
+  50% { transform:translateY(-14px) rotate(2deg); }
+}
+@keyframes appear {
+  from { opacity:0; transform:translateY(20px) scale(.97); }
+  to { opacity:1; transform:translateY(0) scale(1); }
+}
+@keyframes pulse {
+  50% { box-shadow:0 0 35px #ff7ca866,0 0 60px #a78bfa33; }
+}
+@keyframes flame {
+  50% { transform:translateX(-50%) scale(1.2,.85) rotate(5deg); }
+}
+@keyframes rise {
+  to { transform:translateY(-110vh) rotate(25deg); opacity:0; }
+}
+@keyframes heartbeat {
+  15%,45% { transform:scale(1.15); }
+  30%,60%,100% { transform:scale(1); }
+}
+@keyframes rainbow {
+  to { background-position:200% center; }
+}
+.topbar {
+  position:fixed; z-index:8; top:0; left:0; right:0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; gap:8px;
+  background:linear-gradient(#170b2ddd,transparent);
+}
+.brand {
+  font:25px "Dancing Script",cursive;
+  color:#ffb6d1;
+}
+.top-actions { display:flex; gap:8px; }
+.icon-btn {
+  width:42px; height:42px; border-radius:50%;
+  border:1px solid #ffffff30; background:#ffffff15;
+  color:white; font-size:19px;
+}
+.progress-wrap {
+  position:fixed; z-index:8; top:62px; left:7%; width:86%;
+}
+.progress-track { height:4px; background:#ffffff20; border-radius:5px; overflow:hidden; }
+#progress {
+  height:100%; width:11.11%;
+  background:linear-gradient(90deg,#ff7ca8,#ffe49a,#b69aff);
+  transition:width .4s;
+}
+.step-label { font-size:10px; text-align:right; color:#d8c8e7; margin-top:5px; }
+.screen {
+  position:fixed; inset:0; z-index:1;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:100px 20px 30px; overflow-y:auto;
+  text-align:center; opacity:0; visibility:hidden; pointer-events:none;
+  transform:translateY(18px) scale(.98);
+  transition:opacity .4s,transform .4s,visibility .4s;
+}
+.screen.active {
+  opacity:1; visibility:visible; pointer-events:auto;
+  transform:none; z-index:2;
+}
+.content { width:100%; max-width:520px; margin:auto; }
+.eyebrow {
+  font-size:10px; letter-spacing:2.5px; font-weight:700;
+  text-transform:uppercase; color:var(--gold); margin-bottom:12px;
+}
+h1,h2,h3 { margin:9px 0 14px; }
+h1 { font-size:clamp(32px,8vw,52px); line-height:1.15; }
+h2 { font-size:clamp(23px,6vw,32px); }
+p { line-height:1.8; }
+.muted { color:#e1d3ee; font-size:13px; }
+.script {
+  font-family:"Dancing Script",cursive;
+  color:#ffb6d1; font-size:clamp(35px,9vw,52px);
+}
+.gradient {
+  background:linear-gradient(90deg,#fff2bc,#ff92bf,#c8a8ff,#fff2bc);
+  background-size:200%; -webkit-background-clip:text;
+  background-clip:text; color:transparent;
+  animation:rainbow 6s linear infinite;
+}
+.btn {
+  border:1px solid #ffffff30; border-radius:40px;
+  padding:12px 20px; margin:8px 3px 0; color:white;
+  font-size:13px; font-weight:700;
+  background:linear-gradient(120deg,#ff6598,#a56aff);
+  box-shadow:0 8px 25px #b451a544;
+  transition:transform .2s,filter .2s;
+}
+.btn:hover { transform:translateY(-2px); filter:brightness(1.1); }
+.btn:active { transform:scale(.96); }
+.btn.secondary { background:#ffffff12; box-shadow:none; }
+.hide { display:none!important; }
+.emoji { display:block; font-size:76px; animation:float 3s infinite; }
+.glass {
+  background:#ffffff12; border:1px solid #ffffff22;
+  border-radius:22px; padding:20px;
+  backdrop-filter:blur(12px); box-shadow:0 12px 40px #0002;
+}
+.orbit {
+  width:165px; height:165px; margin:12px auto 22px;
+  border:1px solid #ffffff30; border-radius:50%;
+  display:grid; place-items:center; animation:pulse 3s infinite;
+}
+.gift-box { font-size:90px; display:block; animation:float 2s infinite; }
+.cake-stage { height:205px; display:grid; place-items:end center; margin:10px auto; }
+.cake { position:relative; width:230px; height:175px; }
+.cake-base {
+  position:absolute; bottom:0; left:15px; width:200px; height:75px;
+  border-radius:13px 13px 20px 20px;
+  background:linear-gradient(90deg,#d84c83,#ff94ba,#d94c82);
+  box-shadow:inset 0 -9px #ad3867,0 10px 25px #0002;
+}
+.cake-middle {
+  position:absolute; bottom:67px; left:35px; width:160px; height:55px;
+  border-radius:12px; background:linear-gradient(90deg,#e5a0ff,#ffe4f0,#d5a1ff);
+  box-shadow:inset 0 -7px #c57de2;
+}
+.cake-top {
+  position:absolute; bottom:113px; left:47px; width:136px; height:23px;
+  border-radius:50%; background:#fff0f8;
+}
+.candle {
+  position:absolute; bottom:130px; left:109px; width:12px; height:40px;
+  background:repeating-linear-gradient(45deg,#fff 0 5px,#ff79ad 5px 10px);
+  border-radius:4px;
+}
+.flame {
+  position:absolute; bottom:168px; left:115px; width:20px; height:27px;
+  background:radial-gradient(#fff,#ffe27a 45%,#ff7a31);
+  border-radius:60% 40% 55% 45%;
+  transform:translateX(-50%); animation:flame .45s infinite;
+  filter:drop-shadow(0 0 13px #ffbb57);
+}
+.cake.unlit .flame { display:none; }
+.cake.unlit .candle { opacity:.5; }
+.balloons {
+  display:flex; justify-content:center; flex-wrap:wrap; gap:15px;
+  margin:28px 0;
+}
+.balloon {
+  width:53px; height:70px; border-radius:50% 50% 45% 45%;
+  position:relative; animation:float 2s infinite;
+  box-shadow:inset -7px -7px 12px #0002,inset 8px 8px 13px #fff4;
+  transition:opacity .25s,transform .25s;
+}
+.balloon:after {
+  content:""; position:absolute; left:26px; bottom:-20px;
+  height:20px; border-left:1px solid #ffffff70;
+}
+.balloon:nth-child(1) { background:#ff6598; }
+.balloon:nth-child(2) { background:#65bfff; animation-delay:.3s; }
+.balloon:nth-child(3) { background:#bd8bff; animation-delay:.6s; }
+.balloon:nth-child(4) { background:#ffcc72; animation-delay:.9s; }
+.balloon.popped { opacity:0; transform:scale(1.8) rotate(25deg); pointer-events:none; }
+.reason-list { display:grid; gap:8px; text-align:left; }
+.reason {
+  padding:11px 14px; border:1px solid #ffffff20;
+  background:#ffffff0d; border-radius:12px; font-size:12px;
+  animation:appear .4s;
+}
+.quiz-option {
+  display:block; width:100%; text-align:left; color:white;
+  border:1px solid #ffffff25; background:#ffffff0c;
+  padding:13px; border-radius:13px; margin-top:9px;
+}
+.quiz-option:hover { background:#ffffff20; }
+.quiz-option.correct { border-color:#7ce8b4; background:#38ba7930; }
+.quiz-option.wrong { border-color:#ff809e; background:#ff809e20; }
+#quizFeedback { margin-top:12px; min-height:25px; font-size:13px; }
+.memory-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:16px 0; }
+.memory {
+  overflow:hidden; border:1px solid #ffffff28; border-radius:15px;
+  background:#ffffff0c; animation:appear .6s;
+}
+.memory img { width:100%; height:130px; object-fit:cover; display:block; }
+.memory p { padding:8px; font-size:11px; }
+.envelope-wrap {
+  width:min(290px,85vw); height:185px; margin:28px auto;
+  position:relative; cursor:pointer; perspective:900px;
+}
+.env-body {
+  position:absolute; inset:0; background:#c89d45;
+  border-radius:9px; box-shadow:0 12px 30px #0003;
+}
+.env-flap {
+  position:absolute; top:0; left:0; width:0; height:0;
+  border-left:145px solid transparent; border-right:145px solid transparent;
+  border-top:110px solid #f4d77b; transform-origin:top;
+  transition:transform .8s; z-index:4;
+}
+.envelope-wrap.open .env-flap { transform:rotateX(180deg); z-index:0; }
+.letter {
+  position:absolute; bottom:7px; left:10px; width:calc(100% - 20px);
+  height:160px; padding:15px; background:#fff9e9; color:#493347;
+  text-align:left; border-radius:6px; overflow:auto;
+  transition:transform .8s,height .8s; z-index:2; font-size:12px;
+}
+.envelope-wrap.open .letter {
+  transform:translateY(-95px); height:245px; z-index:5;
+  box-shadow:0 0 25px #0004;
+}
+.letter h3 { color:#d64f83; font:26px "Dancing Script",cursive; }
+#typed { line-height:1.9; white-space:pre-line; }
+.wish-card { animation:appear .6s; }
+.final-heart { font-size:32px; animation:heartbeat 1.5s infinite; }
+.photo-frame {
+  padding:8px; background:#fff4e9; border-radius:7px;
+  transform:rotate(-2deg); box-shadow:0 12px 40px #0004;
+  max-width:280px; margin:18px auto;
+}
+.photo-frame img { width:100%; height:220px; object-fit:cover; display:block; }
+.photo-caption {
+  color:#6e3558; font:23px "Dancing Script",cursive; padding:8px;
+}
+.floating-heart {
+  position:fixed; z-index:0; bottom:-50px; left:var(--left);
+  font-size:var(--size); animation:rise var(--duration) linear forwards;
+  pointer-events:none;
+}
+#toast {
+  position:fixed; z-index:20; left:50%; bottom:20px;
+  transform:translateX(-50%); background:#fff; color:#49203e;
+  padding:11px 18px; border-radius:30px; font-size:12px;
+  max-width:90vw; text-align:center;
+}
+@media(max-height:720px) {
+  .screen { padding-top:84px; padding-bottom:18px; }
+  .orbit { width:125px; height:125px; }
+  .gift-box { font-size:70px; }
+  .cake-stage { height:180px; transform:scale(.9); }
+  .memory img { height:100px; }
+  .photo-frame img { height:170px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*:before,*:after {
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+  }
+}
+</style>
+</head>
+
+<body>
+<div id="sky"></div>
+
+<header class="topbar">
+  <div class="brand">For Prachi ♡</div>
+  <div class="top-actions">
+    <button class="icon-btn" id="musicBtn" aria-label="Toggle music">♫</button>
+    <button class="icon-btn" id="soundBtn" aria-label="Toggle sound">🔔</button>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-track"><div id="progress"></div></div>
+  <div class="step-label" id="stepLabel">A little surprise awaits...</div>
+</div>
+
+<!-- STEP 1 -->
+<section class="screen active" id="s1">
+  <div class="content">
+    <p class="eyebrow">A little magic, made with love</p>
+    <div class="orbit"><span class="gift-box">🎁</span></div>
+    <h1 class="gradient">Someone Special<br>Has a Surprise!</h1>
+    <p class="muted">A tiny universe of smiles, memories and birthday magic, created especially for you.</p>
+    <p class="script" style="margin-top:15px">Dear Prachi... 💗</p>
+    <button class="btn" onclick="go(2)">Open Your Surprise ✨</button>
+    <p class="muted" style="margin-top:15px;font-size:11px">Made with love by Manglam ❤️</p>
+  </div>
+</section>
+
+<!-- STEP 2 -->
+<section class="screen" id="s2">
+  <div class="content">
+    <p class="eyebrow">Chapter 01 · A little countdown</p>
+    <span class="emoji">🌙</span>
+    <h2>Ready for some magic?</h2>
+    <p class="muted">Take a deep breath and get ready for your special day.</p>
+    <div class="glass" style="margin-top:20px">
+      <div id="countdown" class="script">3 · 2 · 1 · Surprise!</div>
+      <p class="muted">Your birthday celebration begins now.</p>
+    </div>
+    <button class="btn" onclick="startCountdown()">Start the Magic ✨</button>
+    <button class="btn secondary" onclick="go(3)">Skip Countdown →</button>
+  </div>
+</section>
+
+<!-- STEP 3 -->
+<section class="screen" id="s3">
+  <div class="content">
+    <p class="eyebrow">Chapter 02 · Make a wish</p>
+    <h2>A cake made of sweetness 🎂</h2>
+    <p class="muted" id="cakeHint">Your birthday cake is waiting for its candle!</p>
+    <div class="cake-stage">
+      <div class="cake unlit" id="cake">
+        <div class="cake-base"></div><div class="cake-middle"></div>
+        <div class="cake-top"></div><div class="candle"></div>
+        <div class="flame"></div>
+      </div>
+    </div>
+    <h2 class="script" id="cakeMessage">For the birthday girl 💕</h2>
+    <button class="btn" id="lightBtn" onclick="lightCake()">Light the Candle 🕯️</button>
+    <button class="btn hide" id="blowBtn" onclick="blowCandle()">Make a Wish & Blow! 🌬️</button>
+    <button class="btn hide" id="cakeNext" onclick="go(4)">Let the Celebration Begin 🎉</button>
+  </div>
+</section>
+
+<!-- STEP 4 -->
+<section class="screen" id="s4">
+  <div class="content">
+    <p class="eyebrow">Chapter 03 · Pop some happiness</p>
+    <h2>Pop the balloons! 🎈</h2>
+    <p class="muted">Every balloon hides a little reason to smile.</p>
+    <div class="balloons" id="balloons">
+      <button class="balloon" aria-label="Pop balloon one" onclick="pop(this,0)"></button>
+      <button class="balloon" aria-label="Pop balloon two" onclick="pop(this,1)"></button>
+      <button class="balloon" aria-label="Pop balloon three" onclick="pop(this,2)"></button>
+      <button class="balloon" aria-label="Pop balloon four" onclick="pop(this,3)"></button>
+    </div>
+    <div class="reason-list" id="reasons"></div>
+    <p class="muted" id="popCount" style="margin-top:12px">0 of 4 balloons popped</p>
+    <button class="btn hide" id="balloonNext" onclick="go(5)">Unlock the Next Surprise 💜</button>
+  </div>
+</section>
+
+<!-- STEP 5 -->
+<section class="screen" id="s5">
+  <div class="content">
+    <p class="eyebrow">Chapter 04 · A little birthday quiz</p>
+    <span class="emoji" style="font-size:60px">🧩</span>
+    <h2>A tiny happiness quiz!</h2>
+    <p class="muted">No marks, no pressure — just pick your favourite birthday vibe.</p>
+    <div class="glass" style="margin-top:16px">
+      <h3 id="quizQuestion">What makes a birthday feel special?</h3>
+      <div id="quizOptions">
+        <button class="quiz-option" onclick="answerQuiz(0)">🎁 Thoughtful surprises</button>
+        <button class="quiz-option" onclick="answerQuiz(1)">🍰 Cake and treats</button>
+        <button class="quiz-option" onclick="answerQuiz(2)">💖 Love and laughter</button>
+      </div>
+      <p id="quizFeedback" aria-live="polite"></p>
+    </div>
+    <button class="btn hide" id="quizNext" onclick="go(6)">See Your Birthday Memories 📸</button>
+  </div>
+</section>
+
+<!-- STEP 6 -->
+<section class="screen" id="s6">
+  <div class="content">
+    <p class="eyebrow">Chapter 05 · Little moments</p>
+    <h2>Memories & moments 📸</h2>
+    <p class="muted">A little collection of birthday happiness.</p>
+    <div class="memory-grid">
+      <div class="memory">
+        <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=500&q=80" alt="Birthday decorations" loading="lazy">
+        <p>Little moments, big smiles ✨</p>
+      </div>
+      <div class="memory">
+        <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=500&q=80" alt="Colorful birthday celebration" loading="lazy">
+        <p>A day to remember 🎉</p>
+      </div>
+      <div class="memory">
+        <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=500&q=80" alt="Birthday cake" loading="lazy">
+        <p>A little extra sweetness 🍰</p>
+      </div>
+      <div class="memory">
+        <img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=500&q=80" alt="Friends having fun" loading="lazy">
+        <p>More smiles to come 💕</p>
+      </div>
+    </div>
+    <button class="btn" onclick="go(7)">Read Your Secret Letter 💌</button>
+  </div>
+</section>
+
+<!-- STEP 7 -->
+<section class="screen" id="s7">
+  <div class="content">
+    <p class="eyebrow">Chapter 06 · From the heart</p>
+    <h2>One little letter, just for you 💌</h2>
+    <p class="muted">Tap the envelope and let the words unfold.</p>
+    <div class="envelope-wrap" id="envelope" role="button" tabindex="0" aria-label="Open your birthday letter" onclick="openLetter()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLetter()}">
+      <div class="env-body"></div>
+      <div class="letter">
+        <h3>Dear Prachi, ❤️</h3>
+        <p id="typed"></p>
+        <p id="signoff" class="hide" style="text-align:right;color:#d64f83;font-weight:700;margin-top:12px">With lots of love,<br>Manglam ❤️</p>
+      </div>
+      <div class="env-flap"></div>
+    </div>
+    <p class="muted" id="letterHint">Your little letter is waiting...</p>
+    <button class="btn hide" id="letterNext" onclick="go(8)">One Last Surprise 🎁</button>
+  </div>
+</section>
+
+<!-- STEP 8 -->
+<section class="screen" id="s8">
+  <div class="content">
+    <p class="eyebrow">Chapter 07 · A wish for you</p>
+    <span class="emoji">🌷</span>
+    <h2 class="script">A wish from Manglam</h2>
+    <div class="glass wish-card">
+      <p>May your mornings bring hope, your days bring laughter, and your nights bring peaceful dreams.</p>
+      <p style="margin-top:12px">May you discover beautiful new things, achieve the goals close to your heart, and always find reasons to smile.</p>
+      <p style="margin-top:12px;color:#ffb6d1;font-weight:700">You deserve a year full of wonderful moments. ❤️</p>
+    </div>
+    <div style="font-size:30px;margin:16px">🌸 ✨ 🦋 ✨ 🌸</div>
+    <button class="btn" onclick="go(9)">Open the Grand Finale 💖</button>
+  </div>
+</section>
+
+<!-- STEP 9 -->
+<section class="screen" id="s9">
+  <div class="content">
+    <div class="final-heart">✨ 💖 ✨</div>
+    <p class="eyebrow">Your special moment</p>
+    <h1 class="gradient" style="font-size:clamp(38px,11vw,66px)">HAPPY<br>BIRTHDAY<br>PRACHI!</h1>
+    <div class="photo-frame">
+      <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=500&q=80" alt="Birthday celebration" loading="lazy">
+      <div class="photo-caption">A little magic, just for you ♡</div>
+    </div>
+    <p>May your life sparkle with happiness, love and beautiful memories! 🌸</p>
+    <p class="script" style="margin-top:10px">With love, Manglam ❤️</p>
+    <button class="btn" onclick="finale()">Celebrate One More Time 🎆</button>
+    <button class="btn secondary" onclick="restart()">Replay the Whole Surprise ↻</button>
+  </div>
+</section>
+
+<div id="toast" class="hide" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+const TOTAL = 9;
+
+let current = 1;
+let popped = new Set();
+let cakeLit = false;
+let cakeBlown = false;
+let quizDone = false;
+let letterStarted = false;
+let countdownTimer = null;
+let typingTimer = null;
+let toastTimer = null;
+
+const compliments = [
+  "✨ Your smile can brighten an ordinary day.",
+  "💖 You deserve kindness, laughter and beautiful memories.",
+  "🌷 Your own little way of being you is special.",
+  "🦋 May new adventures and happy surprises find you."
+];
+
+const letterText =
+  "Today is all about celebrating you and the happiness you bring into the world. " +
+  "I hope your day is filled with beautiful surprises, endless smiles and moments you will always remember.\n\n" +
+  "May all your dreams get closer, may you always find reasons to smile, " +
+  "and may the coming year bring you countless wonderful memories.\n\n" +
+  "Keep shining, keep smiling and always be your amazing self. " +
+  "You deserve all the happiness this world has to offer. 🌸✨";
+
+// Starry Sky Background Generator
+function createStars() {
+  const sky = $('sky');
+  for(let i = 0; i < 50; i++) {
+    let star = document.createElement('d
